@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page introuvable — GAEC des Prés du Moulin</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://gaecdespresdumoulin.fr/404.html">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/logo.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/logo.png">
+  <link rel="manifest" href="/manifest.json">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* ── 404 LAYOUT ─────────────────────────────────────────── */
+    .not-found {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: calc(88px + 4rem) 8vw 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Grand "404" décoratif en fond */
+    .not-found::after {
+      content: '404';
+      position: absolute;
+      font-family: var(--display);
+      font-size: clamp(18rem, 40vw, 36rem);
+      font-weight: 700;
+      color: var(--forest);
+      opacity: 0.035;
+      line-height: 1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .not-found-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 640px;
+      animation: fadeUp 0.9s 0.2s both;
+    }
+
+    /* Cerise décorative SVG */
+    .not-found-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 2rem;
+      animation: gentle-swing 4s ease-in-out infinite;
+    }
+
+    @keyframes gentle-swing {
+      0%, 100% { transform: rotate(-4deg); }
+      50%       { transform: rotate(4deg); }
+    }
+
+    .not-found-code {
+      font-family: var(--display);
+      font-size: clamp(5rem, 14vw, 9rem);
+      font-weight: 700;
+      line-height: 0.9;
+      color: var(--forest);
+      letter-spacing: -0.02em;
+    }
+
+    .not-found-code span {
+      color: var(--accent);
+    }
+
+    .not-found-rule {
+      width: 48px;
+      height: 2px;
+      background: var(--accent);
+      border: none;
+      margin: 1.8rem auto;
+    }
+
+    .not-found-title {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 400;
+      color: var(--forest);
+      line-height: 1.3;
+      margin-bottom: 1.2rem;
+    }
+
+    .not-found-text {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text-lt);
+      max-width: 440px;
+      margin-bottom: 2.5rem;
+    }
+
+    .not-found-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .not-found-links {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .not-found-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-lt);
+      border-bottom: 1px solid var(--cream2);
+      padding-bottom: 2px;
+      transition: color 0.25s, border-color 0.25s;
+    }
+
+    .not-found-links a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Décoration — brindille SVG en bas à gauche */
+    .deco-branch {
+      position: absolute;
+      bottom: -20px;
+      left: -30px;
+      opacity: 0.08;
+      pointer-events: none;
+      transform: rotate(-15deg);
+    }
+
+    .deco-branch-r {
+      position: absolute;
+      top: 12%;
+      right: -40px;
+      opacity: 0.06;
+      pointer-events: none;
+      transform: rotate(20deg) scaleX(-1);
+    }
+
+    /* ── ANIMATIONS ────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .not-found {
+        padding-top: calc(64px + 3rem);
+      }
+      .not-found-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .not-found-actions a {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body data-page="inner">
+
+<!-- ═══ NAV ═══════════════════════════════════════════════════ -->
+<header role="banner">
+  <nav id="nav" aria-label="Navigation principale">
+    <a href="index.html" class="nav-logo" aria-label="Retour à l'accueil">
+      <img src="images/logo.png" alt="Logo GAEC des Prés du Moulin" class="nav-logo-img" width="56" height="56">
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html#histoire">La Ferme</a></li>
+      <li><a href="index.html#produits">Nos Produits</a></li>
+      <li><a href="index.html#galerie">La Récolte</a></li>
+      <li><a href="index.html#trouver">Nous Trouver</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="index.html#trouver-contact" class="nav-cta">Contact</a>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu mobile">
+  <a href="index.html#histoire" class="mobile-link">La Ferme</a>
+  <a href="index.html#produits" class="mobile-link">Nos Produits</a>
+  <a href="index.html#galerie" class="mobile-link">La Récolte</a>
+  <a href="index.html#trouver" class="mobile-link">Nous Trouver</a>
+  <a href="index.html#trouver-contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- ═══ CONTENU 404 ═══════════════════════════════════════════ -->
+<main id="contenu-principal">
+  <section class="not-found" aria-labelledby="not-found-title">
+
+    <!-- Décorations fond -->
+    <svg class="deco-branch" width="340" height="480" viewBox="0 0 340 480" fill="none" aria-hidden="true">
+      <path d="M170 480 C170 480 165 380 155 320 C145 260 110 220 90 170 C70 120 80 60 100 20" stroke="#2A3820" stroke-width="3" fill="none"/>
+      <path d="M155 320 C130 300 95 305 70 295" stroke="#2A3820" stroke-width="2" fill="none"/>
+      <path d="M140 270 C115 255 100 240 80 245" stroke="#2A3820" stroke-width="2" fill="none"/>
+      <path d="M148 345 C168 325 190 320 210 310" stroke="#2A3820" stroke-width="2" fill="none"/>
+      <circle cx="68" cy="294" r="10" fill="#C4622D"/>
+      <circle cx="79" cy="244" r="8" fill="#C4622D"/>
+      <circle cx="210" cy="308" r="9" fill="#C4622D"/>
+    </svg>
+
+    <svg class="deco-branch-r" width="260" height="380" viewBox="0 0 260 380" fill="none" aria-hidden="true">
+      <path d="M130 380 C130 380 135 290 140 240 C148 185 175 155 185 110 C195 65 180 20 165 0" stroke="#2A3820" stroke-width="3" fill="none"/>
+      <path d="M140 240 C165 222 195 228 215 218" stroke="#2A3820" stroke-width="2" fill="none"/>
+      <path d="M145 195 C168 180 185 168 200 172" stroke="#2A3820" stroke-width="2" fill="none"/>
+      <circle cx="217" cy="216" r="9" fill="#C4622D"/>
+      <circle cx="200" cy="170" r="8" fill="#C4622D"/>
+    </svg>
+
+    <div class="not-found-inner">
+
+      <!-- Cerise SVG animée -->
+      <svg class="not-found-icon" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+        <path d="M40 12 C40 12 38 4 44 2 C50 0 52 8 46 14" stroke="#2A3820" stroke-width="2" stroke-linecap="round"/>
+        <path d="M40 12 C36 6 26 4 22 10 C18 16 22 24 28 24" stroke="#2A3820" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <circle cx="26" cy="50" r="16" fill="#C4622D"/>
+        <circle cx="54" cy="46" r="14" fill="#C4622D"/>
+        <circle cx="23" cy="46" r="3" fill="rgba(255,255,255,0.25)"/>
+        <circle cx="51" cy="42" r="2.5" fill="rgba(255,255,255,0.25)"/>
+        <path d="M40 12 L42 28 M42 28 C44 26 50 26 54 32" stroke="#2A3820" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+
+      <p class="section-label" aria-hidden="true">Erreur</p>
+
+      <p class="not-found-code" aria-label="404">
+        4<span>0</span>4
+      </p>
+
+      <hr class="not-found-rule">
+
+      <h1 class="not-found-title" id="not-found-title">
+        Cette page s'est égarée<br>dans nos champs…
+      </h1>
+
+      <p class="not-found-text">
+        Pas de panique — nos yaourts, eux, n'ont pas bougé. La page que vous cherchez n'existe plus ou a été déplacée. Retournez à l'accueil pour retrouver vos marques.
+      </p>
+
+      <div class="not-found-actions">
+        <a href="index.html" class="btn-primary">
+          Retour à l'accueil
+        </a>
+        <a href="index.html#produits" class="btn-outline">
+          Voir nos produits
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <nav class="not-found-links" aria-label="Liens rapides">
+        <a href="index.html#histoire">La Ferme</a>
+        <a href="index.html#galerie">La Récolte</a>
+        <a href="index.html#trouver">Nous Trouver</a>
+        <a href="index.html#trouver-contact">Contact</a>
+      </nav>
+
+    </div>
+  </section>
+</main>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════ -->
+<footer role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="images/logo.png" alt="Logo GAEC des Prés du Moulin" style="height:72px;width:auto;opacity:0.9;margin-bottom:1rem" width="72" height="72" loading="lazy">
+      <p>Ferme familiale ardéchoise spécialisée dans la production de yaourts fermiers, faisselles et fruits de saison. Vente directe à la ferme depuis 2001.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul role="list">
+        <li><a href="index.html#histoire">La Ferme</a></li>
+        <li><a href="index.html#produits">Nos Produits</a></li>
+        <li><a href="index.html#galerie">La Récolte</a></li>
+        <li><a href="index.html#trouver">Nous Trouver</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>Les Chièzes<br>07570 Désaignes</p>
+      <p style="margin-top:0.8rem">Samedi 8h30 – 12h<br>Espèces uniquement</p>
+      <p style="margin-top:0.8rem"><a href="tel:+33608474525" class="footer-phone">06 08 47 45 25</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <time datetime="2026">2026</time> GAEC des Prés du Moulin · Désaignes, Ardèche</span>
+    <div class="footer-legal">
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="politique-confidentialite.html">Politique de confidentialité</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>
