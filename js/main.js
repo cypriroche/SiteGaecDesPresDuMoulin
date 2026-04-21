@@ -189,12 +189,111 @@ async function findNearestStore() {
   }
 }
 
-const searchBtn = document.getElementById('pvente-search-btn');
+const searchBtn   = document.getElementById('pvente-search-btn');
 const searchInput = document.getElementById('pvente-search-input');
 
 searchBtn?.addEventListener('click', findNearestStore);
+
+// ─── AUTOCOMPLETE VILLE ────────────────────────────────────────
+const pvSearch  = document.getElementById('pvente-search');
+const searchWrap = pvSearch?.querySelector('.pvente-search-wrap');
+
+// Crée un pivot position:relative autour du champ pour que la liste
+// soit positionnée par rapport au champ uniquement (pas à pvente-search entier)
+const acAnchor = document.createElement('div');
+acAnchor.className = 'pvente-search-anchor';
+if (pvSearch && searchWrap) {
+  pvSearch.insertBefore(acAnchor, searchWrap);
+  acAnchor.appendChild(searchWrap);
+}
+
+const acList = document.createElement('ul');
+acList.id = 'pvente-autocomplete';
+acList.className = 'pvente-autocomplete';
+acList.setAttribute('role', 'listbox');
+acList.setAttribute('aria-label', 'Suggestions de villes');
+acAnchor.appendChild(acList);
+
+let acTimer   = null;
+let acFocused = -1;
+let acItems   = [];
+
+function closeAC() {
+  acList.innerHTML = '';
+  acList.classList.remove('open');
+  acFocused = -1;
+  acItems   = [];
+}
+
+function buildLabel(s) {
+  const parts = s.display_name.split(', ');
+  return parts.slice(0, Math.min(3, parts.length)).join(', ');
+}
+
+function renderAC(data) {
+  acList.innerHTML = '';
+  acFocused = -1;
+  if (!data.length) { acList.classList.remove('open'); return; }
+  data.forEach(s => {
+    const li = document.createElement('li');
+    li.setAttribute('role', 'option');
+    li.setAttribute('aria-selected', 'false');
+    li.textContent = buildLabel(s);
+    li.addEventListener('mousedown', e => {
+      e.preventDefault();
+      searchInput.value = buildLabel(s);
+      closeAC();
+      findNearestStore();
+    });
+    acList.appendChild(li);
+  });
+  acItems = [...acList.querySelectorAll('li')];
+  acList.classList.add('open');
+}
+
+searchInput?.addEventListener('input', () => {
+  clearTimeout(acTimer);
+  const q = searchInput.value.trim();
+  if (q.length < 2) { closeAC(); return; }
+  acTimer = setTimeout(async () => {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&countrycodes=fr`,
+        { headers: { 'Accept-Language': 'fr' } }
+      );
+      renderAC(await res.json());
+    } catch { closeAC(); }
+  }, 350);
+});
+
 searchInput?.addEventListener('keydown', e => {
+  const listOpen = acList.classList.contains('open');
+  if (listOpen) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      acFocused = Math.min(acFocused + 1, acItems.length - 1);
+      acItems.forEach((li, i) => li.classList.toggle('focused', i === acFocused));
+      return;
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      acFocused = Math.max(acFocused - 1, 0);
+      acItems.forEach((li, i) => li.classList.toggle('focused', i === acFocused));
+      return;
+    }
+    if (e.key === 'Enter' && acFocused >= 0) {
+      e.preventDefault();
+      acItems[acFocused].dispatchEvent(new MouseEvent('mousedown'));
+      return;
+    }
+    if (e.key === 'Escape') { closeAC(); return; }
+  }
   if (e.key === 'Enter') findNearestStore();
+});
+
+searchInput?.addEventListener('blur', () => setTimeout(closeAC, 200));
+document.addEventListener('click', e => {
+  if (!pvSearch?.contains(e.target)) closeAC();
 });
 
 } // end Leaflet guard
