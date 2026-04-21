@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GAEC des Prés du Moulin — Yaourts & Produits Fermiers, Ardèche</title>
+  <meta name="description" content="Ferme familiale en Ardèche — yaourts fermiers, faisselles, fromage blanc et cerises. Vente directe le samedi matin à Désaignes.">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────── */
+    :root {
+      --cream:    #F7F2E8;
+      --cream2:   #EDE7D6;
+      --forest:   #2A3820;
+      --sage:     #7A8C6A;
+      --sage-lt:  #E8EDDF;
+      --accent:   var(--tw-accent, #C4622D);
+      --ocre:     #D4A853;
+      --text:     #2A2A22;
+      --text-lt:  #6B6B58;
+      --radius:   18px;
+      --serif:    'DM Serif Display', Georgia, serif;
+      --sans:     'Outfit', sans-serif;
+    }
+
+    /* ─── RESET ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--sans);
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* Grain texture */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999;
+      opacity: 0.6;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 72px;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(247, 242, 232, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    }
+    .nav-logo { flex-shrink: 0; display: flex; align-items: center; }
+    .nav-logo-img { height: 50px; width: auto; filter: brightness(0) invert(1); transition: filter 0.4s; }
+    nav.scrolled .nav-logo-img { filter: none; }
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+      font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em;
+    }
+    .nav-links a {
+      color: rgba(247,242,232,0.9);
+      transition: color 0.3s;
+      position: relative; padding-bottom: 3px;
+    }
+    nav.scrolled .nav-links a { color: var(--text); }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1.5px; background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      font-size: 0.83rem; font-weight: 500;
+      padding: 9px 22px; border-radius: 999px;
+      border: 1.5px solid rgba(247,242,232,0.6);
+      color: var(--cream);
+      transition: all 0.3s;
+    }
+    nav.scrolled .nav-cta {
+      border-color: var(--forest);
+      color: var(--forest);
+    }
+    .nav-cta:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff !important;
+    }
+
+    /* Hamburger */
+    .burger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+    .burger span {
+      display: block; width: 24px; height: 1.5px;
+      background: var(--cream); margin: 5px 0;
+      transition: all 0.3s;
+    }
+    nav.scrolled .burger span { background: var(--forest); }
+    .burger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: var(--forest); flex-direction: column;
+      align-items: center; justify-content: center; gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--serif); font-size: 2.2rem; color: var(--cream);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--ocre); }
+
+    /* ─── HERO ────────────────────────────────────────── */
+    #hero {
+      position: relative; height: 100vh; min-height: 600px;
+      display: flex; align-items: flex-end;
+      padding: 0 8vw 10vh;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('images/ferme.jpg') center/cover no-repeat;
+      transform-origin: center; will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(20,28,14,0.80) 0%, rgba(20,28,14,0.15) 55%, transparent 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2; max-width: 720px;
+    }
+    .hero-eyebrow {
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--ocre);
+      margin-bottom: 1.2rem; opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
+    }
+    .hero-title {
+      font-family: var(--serif); font-size: clamp(2.8rem, 6vw, 5.2rem);
+      line-height: 1.05; color: var(--cream);
+      margin-bottom: 1.4rem; opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 1.5vw, 1.15rem); font-weight: 300;
+      color: rgba(247,242,232,0.82); line-height: 1.65;
+      max-width: 480px; margin-bottom: 2.5rem;
+      opacity: 0; animation: fadeUp 0.9s 0.7s forwards;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.9s 0.9s forwards; }
+    .btn-primary {
+      padding: 14px 34px; border-radius: 999px;
+      background: var(--accent); color: #fff;
+      font-size: 0.9rem; font-weight: 500;
+      transition: all 0.3s; border: 2px solid var(--accent);
+    }
+    .btn-primary:hover { background: transparent; color: var(--accent); }
+    .btn-ghost {
+      padding: 14px 34px; border-radius: 999px;
+      border: 1.5px solid rgba(247,242,232,0.5); color: var(--cream);
+      font-size: 0.9rem; font-weight: 400;
+      transition: all 0.3s;
+    }
+    .btn-ghost:hover { background: rgba(247,242,232,0.1); border-color: var(--cream); }
+
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; right: 8vw; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      opacity: 0; animation: fadeIn 1s 1.4s forwards;
+    }
+    .hero-scroll span { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,242,232,0.5); }
+    .scroll-line {
+      width: 1px; height: 52px; background: rgba(247,242,232,0.3);
+      position: relative; overflow: hidden;
+    }
+    .scroll-line::after {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 40%;
+      background: var(--ocre);
+      animation: scrollAnim 1.8s ease-in-out infinite;
+    }
+
+    /* ─── SECTION SHARED ─────────────────────────────── */
+    section { padding: 100px 8vw; }
+    .section-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.8rem; display: block;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.1; color: var(--forest);
+    }
+    .section-title em { font-style: italic; color: var(--accent); }
+    .section-rule {
+      width: 48px; height: 2px; background: var(--accent);
+      margin: 1.4rem 0 2rem; border: none;
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.75s cubic-bezier(.2,.9,.2,1), transform 0.75s cubic-bezier(.2,.9,.2,1);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal-l { opacity: 0; transform: translateX(-32px); transition: opacity 0.75s cubic-bezier(.2,.9,.2,1), transform 0.75s cubic-bezier(.2,.9,.2,1); }
+    .reveal-l.in { opacity: 1; transform: none; }
+    .reveal-r { opacity: 0; transform: translateX(32px); transition: opacity 0.75s cubic-bezier(.2,.9,.2,1), transform 0.75s cubic-bezier(.2,.9,.2,1); }
+    .reveal-r.in { opacity: 1; transform: none; }
+    .delay-1 { transition-delay: 0.12s !important; }
+    .delay-2 { transition-delay: 0.24s !important; }
+    .delay-3 { transition-delay: 0.36s !important; }
+    .delay-4 { transition-delay: 0.48s !important; }
+
+    /* ─── HISTOIRE ────────────────────────────────────── */
+    #histoire {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .histoire-img-wrap {
+      position: relative;
+    }
+    .histoire-img {
+      width: 100%; aspect-ratio: 4/5;
+      object-fit: cover;
+      border-radius: 120px 24px 120px 24px;
+      box-shadow: 0 24px 60px rgba(42,56,32,0.18);
+    }
+    .histoire-badge {
+      position: absolute; bottom: -20px; right: -20px;
+      width: 130px; height: 130px; border-radius: 50%;
+      background: var(--forest);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--cream); font-family: var(--serif);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+    }
+    .histoire-badge strong { font-size: 2rem; line-height: 1; }
+    .histoire-badge span { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; margin-top: 4px; text-align: center; padding: 0 10px; }
+    .histoire-text { padding: 20px 0; }
+    .histoire-text p {
+      font-size: 1.05rem; line-height: 1.8; color: var(--text-lt);
+      margin-bottom: 1.5rem;
+    }
+    .histoire-text p strong { color: var(--text); font-weight: 500; }
+    .milestones { display: flex; gap: 2.5rem; margin: 2rem 0; }
+    .milestone { flex: 1; }
+    .milestone-year {
+      font-family: var(--serif); font-size: 1.6rem; color: var(--accent);
+      line-height: 1;
+    }
+    .milestone-label { font-size: 0.8rem; color: var(--text-lt); margin-top: 4px; line-height: 1.4; }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 12px 28px; border-radius: 999px;
+      border: 1.5px solid var(--forest); color: var(--forest);
+      font-size: 0.88rem; font-weight: 500;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover { background: var(--forest); color: var(--cream); }
+    .btn-outline svg { transition: transform 0.3s; }
+    .btn-outline:hover svg { transform: translateX(4px); }
+
+    /* ─── PRODUITS ────────────────────────────────────── */
+    #produits { background: var(--forest); }
+    .produits-header { text-align: center; margin-bottom: 60px; }
+    .produits-header .section-rule { margin: 1.4rem auto 2rem; }
+    .produits-intro { max-width: 560px; margin: 0 auto; font-size: 1.05rem; line-height: 1.8; color: var(--text-lt); }
+
+    .produits-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+    .card {
+      background: var(--cream2); border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(42,56,32,0.07);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(42,56,32,0.14); }
+    .card-img {
+      position: relative; overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+    .card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .card:hover .card-img img { transform: scale(1.06); }
+    .card-badge {
+      position: absolute; top: 14px; left: 14px;
+      background: var(--accent); color: #fff;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 5px 12px; border-radius: 999px;
+    }
+    .card-badge.green { background: var(--forest); }
+    .card-body { padding: 24px 26px 28px; }
+    .card-body h3 {
+      font-family: var(--serif); font-size: 1.3rem; color: var(--forest);
+      margin-bottom: 0.6rem;
+    }
+    .card-body p { font-size: 0.9rem; line-height: 1.7; color: var(--text-lt); }
+    .card-aromes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .card-aromes span {
+      font-size: 0.72rem; padding: 3px 10px; border-radius: 999px;
+      background: var(--cream2); color: var(--forest);
+    }
+
+    /* grande carte cerises */
+    .card-wide {
+      grid-column: span 2;
+    }
+    .card-wide .card-img { aspect-ratio: 16/7; }
+
+    #produits .section-label { color: var(--ocre); }
+    #produits .section-title { color: var(--cream); }
+    #produits .section-rule { background: var(--ocre); }
+    #produits .produits-intro { color: rgba(247,242,232,0.75); }
+    #produits .card-body h3 { color: var(--forest); }
+
+    /* ─── CHIFFRES CLÉS ──────────────────────────────── */
+    #chiffres {
+      background: var(--forest);
+      padding: 90px 8vw;
+      text-align: center;
+    }
+    #chiffres .section-label { color: var(--ocre); }
+    #chiffres .section-title { color: var(--cream); margin-bottom: 64px; }
+    .chiffres-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 40px;
+    }
+    .chiffre {
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    }
+    .chiffre-num {
+      font-family: var(--serif); font-size: clamp(3rem,5vw,4.5rem);
+      color: var(--ocre); line-height: 1;
+    }
+    .chiffre-label {
+      font-size: 0.85rem; color: rgba(247,242,232,0.65);
+      letter-spacing: 0.05em; line-height: 1.4;
+    }
+    .chiffre-divider {
+      width: 1px; height: 80px; background: rgba(247,242,232,0.12);
+      align-self: center;
+    }
+
+    /* ─── GALERIE ──────────────────────────────────── */
+    #galerie { padding: 80px 8vw 100px; }
+    .galerie-header { margin-bottom: 48px; }
+    .galerie-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 240px;
+      gap: 10px;
+    }
+    .galerie-item { overflow: hidden; border-radius: 12px; }
+    .galerie-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .galerie-item:hover img { transform: scale(1.07); }
+    .galerie-item--tall { grid-row: span 2; }
+    .galerie-item--wide { grid-column: span 2; }
+
+    /* ─── NOUS TROUVER ───────────────────────────────── */
+    #trouver { padding: 0; display: block; }
+    .trouver-contact {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 72px; align-items: center;
+      padding: 100px 8vw;
+      background: var(--cream);
+    }
+    .trouver-pvente {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 72px; align-items: start;
+      padding: 100px 8vw;
+      background: var(--forest);
+    }
+    .trouver-pvente h3 { color: var(--cream) !important; }
+    .trouver-pvente .pvente-item { background: rgba(247,242,232,0.1); border-color: transparent; }
+    .trouver-pvente .pvente-item:hover,
+    .trouver-pvente .pvente-item.active { background: rgba(247,242,232,0.15); border-color: var(--ocre); }
+    .trouver-pvente .pvente-item-text strong { color: var(--cream); }
+    .trouver-pvente .pvente-item-text span { color: rgba(247,242,232,0.65); }
+    .trouver-contact-img {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover;
+      border-radius: var(--radius);
+      box-shadow: 0 16px 48px rgba(42,56,32,0.14);
+    }
+    .trouver-info .section-rule { margin-bottom: 2.5rem; }
+    .contact-block { margin-bottom: 2rem; }
+    .contact-block h3 {
+      font-family: var(--serif); font-size: 1.3rem; color: var(--forest);
+      margin-bottom: 1rem;
+    }
+    .contact-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      margin-bottom: 0.9rem;
+    }
+    .contact-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--cream2); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-icon svg { width: 18px; height: 18px; stroke: var(--forest); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .contact-row-text { font-size: 0.95rem; line-height: 1.6; color: var(--text-lt); }
+    .contact-row-text strong { color: var(--text); font-weight: 500; display: block; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 2px; }
+
+    .pvente-list { display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto; padding-right: 6px; scrollbar-width: thin; scrollbar-color: var(--sage) transparent; }
+    .pvente-list::-webkit-scrollbar { width: 4px; }
+    .pvente-list::-webkit-scrollbar-track { background: transparent; }
+    .pvente-list::-webkit-scrollbar-thumb { background: var(--sage); border-radius: 99px; }
+    .pvente-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; border-radius: 12px;
+      background: var(--cream2); cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.25s;
+    }
+    .pvente-item:hover, .pvente-item.active { border-color: var(--accent); background: #fff; }
+    .pvente-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .pvente-dot.ferme { background: var(--accent); }
+    .pvente-dot.store { background: var(--sage); }
+    .pvente-item-text { flex: 1; }
+    .pvente-item-text strong { font-size: 0.88rem; font-weight: 600; color: var(--text); display: block; }
+    .pvente-item-text span { font-size: 0.78rem; color: var(--text-lt); }
+
+    #map-pv {
+      border-radius: var(--radius); overflow: hidden;
+      height: 480px; width: 100%;
+      box-shadow: 0 8px 32px rgba(42,56,32,0.12);
+      position: sticky; top: 100px;
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--forest); padding: 72px 8vw 36px;
+      color: rgba(247,242,232,0.75);
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      gap: 60px; margin-bottom: 56px;
+    }
+    .footer-brand { }
+    .footer-brand-name {
+      font-family: var(--serif); font-size: 1.4rem; color: var(--cream);
+      margin-bottom: 0.6rem;
+    }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.7; max-width: 280px; }
+    .footer-socials { display: flex; gap: 12px; margin-top: 1.5rem; }
+    .social-link {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid rgba(247,242,232,0.2);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .social-link:hover { background: var(--accent); border-color: var(--accent); }
+    .social-link svg { width: 16px; height: 16px; fill: var(--cream); }
+
+    .footer-col h4 {
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ocre); margin-bottom: 1.2rem; font-weight: 600;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .footer-col ul a { font-size: 0.88rem; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--cream); }
+    .footer-col p { font-size: 0.88rem; line-height: 1.8; }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(247,242,232,0.1);
+      padding-top: 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-legal { display: flex; gap: 1.8rem; }
+    .footer-legal a { transition: color 0.2s; }
+    .footer-legal a:hover { color: var(--cream); }
+
+    /* ─── TWEAKS PANEL ────────────────────────────────── */
+    #tweaks-panel {
+      display: none; position: fixed; bottom: 24px; right: 24px; z-index: 10000;
+      background: #fff; border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+      padding: 20px 22px; width: 260px;
+      font-family: var(--sans); font-size: 0.85rem;
+    }
+    #tweaks-panel h3 { font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; color: var(--text-lt); }
+    .tweak-row { margin-bottom: 14px; }
+    .tweak-row label { display: block; font-size: 0.78rem; color: var(--text-lt); margin-bottom: 5px; }
+    .tweak-row input[type=color] { width: 100%; height: 32px; border: none; border-radius: 8px; cursor: pointer; padding: 2px; }
+    .tweak-row input[type=range] { width: 100%; accent-color: var(--accent); }
+    .tweak-row select { width: 100%; padding: 7px 10px; border-radius: 8px; border: 1px solid #ddd; font-family: var(--sans); font-size: 0.82rem; background: #fafafa; }
+
+    /* ─── ANIMATIONS ──────────────────────────────────── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scrollAnim { 0%,100%{transform:translateY(-100%)} 50%{transform:translateY(200%)} }
+    @keyframes countUp { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .produits-grid { grid-template-columns: repeat(2, 1fr); }
+      .chiffres-grid { grid-template-columns: repeat(2,1fr); gap: 50px; }
+      .chiffre-divider { display: none; }
+      .galerie-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 768px) {
+      section { padding: 72px 6vw; }
+      #histoire { grid-template-columns: 1fr; gap: 48px; }
+      .trouver-contact, .trouver-pvente { grid-template-columns: 1fr; padding: 72px 6vw; }
+      #map-pv { position: relative; top: auto; height: 300px; }
+      .produits-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .nav-links, .nav-cta { display: none; }
+      .burger { display: block; }
+      .milestones { flex-direction: column; gap: 1rem; }
+      .chiffres-grid { grid-template-columns: repeat(2,1fr); }
+      .galerie-grid { grid-template-columns: repeat(2,1fr); grid-auto-rows: 180px; }
+      .galerie-item--tall { grid-row: span 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-l, .reveal-r { transition: none !important; opacity: 1; transform: none; }
+      .hero-bg { transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Navigation principale">
+  <a href="#" class="nav-logo" aria-label="Accueil GAEC des Prés du Moulin">
+    <img src="images/logo.png" alt="Logo GAEC des Prés du Moulin" class="nav-logo-img">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#histoire">La Ferme</a></li>
+    <li><a href="#produits">Nos Produits</a></li>
+    <li><a href="#trouver">Nous Trouver</a></li>
+  </ul>
+  <a href="#trouver-pvente" class="nav-cta">Contact</a>
+  <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Menu mobile">
+  <a href="#histoire" class="mobile-link">La Ferme</a>
+  <a href="#produits" class="mobile-link">Nos Produits</a>
+  <a href="#trouver" class="mobile-link">Nous Trouver</a>
+  <a href="#trouver-contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- ═══ HERO ═══════════════════════════════════════════════ -->
+<section id="hero" aria-labelledby="hero-title">
+  <div class="hero-bg" id="hero-bg" aria-hidden="true"></div>
+  <div class="hero-overlay" id="hero-overlay" aria-hidden="true"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Depuis 2001 · Désaignes, Ardèche</p>
+    <h1 class="hero-title" id="hero-title">Bienvenue à la Ferme<br><em style="font-style:italic;color:var(--ocre)">des Prés du Moulin</em></h1>
+    <p class="hero-subtitle">Produits fermiers en Ardèche, du champ à votre assiette. Yaourts artisanaux, faisselles et cerises — fabriqués avec passion depuis plus de vingt ans.</p>
+    <div class="hero-actions">
+      <a href="#produits" class="btn-primary">Découvrir nos produits</a>
+      <a href="#trouver-pvente" class="btn-ghost">Venir nous voir</a>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <span>Défiler</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══ HISTOIRE ════════════════════════════════════════════ -->
+<section id="histoire" aria-labelledby="histoire-title">
+  <div class="histoire-img-wrap reveal-l">
+    <img src="images/histoire.jpg" alt="La ferme GAEC des Prés du Moulin à Désaignes, Ardèche" class="histoire-img" loading="lazy">
+    <div class="histoire-badge" aria-hidden="true">
+      <strong>2001</strong>
+      <span>Fondée à Désaignes</span>
+    </div>
+  </div>
+  <div class="histoire-text reveal-r">
+    <span class="section-label">Notre Histoire</span>
+    <h2 class="section-title" id="histoire-title">Une ferme familiale<br><em>ancrée dans le terroir</em></h2>
+    <hr class="section-rule">
+    <p>Fondée en <strong>2001 par Fabrice</strong> au lieu-dit Les Chièzes à Désaignes, notre exploitation s'est construite autour de l'élevage de vaches laitières <strong>Montbéliardes</strong> et de sept hectares de cerisiers.</p>
+    <p>En 2003, <strong>Sylvain rejoint l'aventure</strong> et ensemble ils créent le GAEC des Prés du Moulin, avec la construction d'un laboratoire artisanal dédié à la fabrication de yaourts et faisselles. Aujourd'hui, chaque samedi matin, c'est ici, à la ferme, qu'on se retrouve.</p>
+    <div class="milestones">
+      <div class="milestone">
+        <div class="milestone-year">25 ans</div>
+        <div class="milestone-label">de savoir-faire<br>laitier artisanal</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-year">7 ha</div>
+        <div class="milestone-label">de cerisiers<br>en Ardèche</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-year">100%</div>
+        <div class="milestone-label">circuit court<br>et vente directe</div>
+      </div>
+    </div>
+    <a href="#trouver-contact" class="btn-outline">
+      Venir à la ferme
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ PRODUITS ═════════════════════════════════════════════ -->
+<section id="produits" aria-labelledby="produits-title">
+  <div class="produits-header reveal">
+    <span class="section-label">Nos Produits</span>
+    <h2 class="section-title" id="produits-title">Du lait à la table,<br><em>tout est fait ici</em></h2>
+    <hr class="section-rule">
+    <p class="produits-intro">Lait entier de vaches Montbéliardes, yaourts artisanaux, faisselles onctueuses et cerises ardéchoises — des produits honnêtes, faits avec soin.</p>
+  </div>
+  <div class="produits-grid" style="font-family: Outfit; text-align: justify;">
+
+    <div class="card reveal delay-1">
+      <div class="card-img">
+        <img src="images/ferme.jpg" alt="Yaourt nature au lait entier de vaches Montbéliardes" loading="lazy">
+        <span class="card-badge green">Vente directe</span>
+      </div>
+      <div class="card-body">
+        <h3>Yaourt Nature</h3>
+        <p>Au lait entier de nos vaches Montbéliardes, pasteurisé à la ferme. Texture onctueuse, goût authentique.</p>
+      </div>
+    </div>
+
+    <div class="card reveal delay-2">
+      <div class="card-img">
+        <img src="images/histoire.jpg" alt="Yaourts aromatisés — 10 arômes disponibles" loading="lazy">
+        <span class="card-badge">10 arômes</span>
+      </div>
+      <div class="card-body">
+        <h3>Yaourts Aromatisés</h3>
+        <p>Dix saveurs pour toutes les envies, toutes faites maison.</p>
+        <div class="card-aromes">
+          <span>Fraise</span><span>Vanille</span><span>Pêche</span><span>Caramel</span>
+          <span>Framboise</span><span>Myrtille</span><span>Mandarine</span><span>Citron</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card reveal delay-3">
+      <div class="card-img">
+        <img src="images/ferme-contact.jpg" alt="Faisselle et fromage blanc battu de la ferme" loading="lazy">
+        <span class="card-badge green">Circuit court</span>
+      </div>
+      <div class="card-body">
+        <h3>Faisselles & Fromage Blanc</h3>
+        <p>Faisselle 500g, plateau 6×125g et fromage blanc battu (sur commande). Lait entier pasteurisé.</p>
+      </div>
+    </div>
+
+    <div class="card reveal delay-1">
+      <div class="card-img">
+        <img src="images/ferme.jpg" alt="Yaourt bicouche châtaigne — spécialité ardéchoise" loading="lazy">
+        <span class="card-badge">Spécialité</span>
+      </div>
+      <div class="card-body">
+        <h3>Bicouche Châtaigne</h3>
+        <p>Crème de marron de la Ferme du Châtaignier à Lamastre — une saveur ardéchoise d'exception.</p>
+      </div>
+    </div>
+
+  </div>
+  <div class="reveal" style="text-align:center; margin-top:52px;">
+    <div style="display:inline-flex;align-items:center;gap:1rem;padding:20px 36px;border-radius:14px;background:var(--cream);box-shadow:0 2px 20px rgba(42,56,32,0.08);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span style="font-size:0.92rem;color:var(--text-lt)"><strong style="color:var(--text)">Vente à la ferme</strong> · Samedi matin de 8h30 à 12h · Espèces uniquement</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GALERIE CERISES ═══════════════════════════════════ -->
+<section id="galerie" aria-labelledby="galerie-title" style="background:var(--cream);">
+  <div class="galerie-header reveal">
+    <span class="section-label" style="color:var(--forest)">La récolte</span>
+    <h2 class="section-title" id="galerie-title" style="color:var(--forest)">Nos cerisiers<br><em style="color:var(--accent)">en images</em></h2>
+    <hr class="section-rule" style="margin:1.4rem 0 0;background:var(--ocre)">
+  </div>
+  <div class="galerie-grid">
+    <div class="galerie-item galerie-item--tall reveal delay-1">
+      <img src="images/cerises.jpg" alt="Cerises ardéchoises en gros plan" loading="lazy">
+    </div>
+    <div class="galerie-item reveal delay-2">
+      <img src="images/cerises2.jpg" alt="Cerisiers à Désaignes" loading="lazy">
+    </div>
+    <div class="galerie-item reveal delay-3">
+      <img src="images/tri-cerises.jpg" alt="Tri des cerises à la ferme" loading="lazy">
+    </div>
+    <div class="galerie-item galerie-item--wide reveal delay-2">
+      <img src="images/cerises-drone.jpg" alt="Vue aérienne des cerisiers" loading="lazy">
+    </div>
+    <div class="galerie-item reveal delay-3">
+      <img src="images/cerises4.jpg" alt="Cerises mûres sur l'arbre" loading="lazy">
+    </div>
+    <div class="galerie-item reveal delay-4">
+      <img src="images/transport-cerises.jpg" alt="Transport des cerises" loading="lazy">
+    </div>
+    <div class="galerie-item reveal delay-1">
+      <img src="images/cerises3.jpg" alt="Récolte des cerises ardéchoises" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NOUS TROUVER ════════════════════════════════════ -->
+<section id="trouver" aria-labelledby="trouver-title">
+
+  <!-- Points de vente + carte -->
+  <div class="trouver-pvente" id="trouver-pvente">
+    <div class="reveal delay-1">
+      <h3 style="font-family:var(--serif);font-size:1.6rem;color:var(--forest);margin-bottom:1.5rem">Points de vente</h3>
+      <div class="pvente-list" id="pvente-list">
+        <div class="pvente-item active" data-index="0">
+          <div class="pvente-dot ferme"></div>
+          <div class="pvente-item-text"><strong>La Ferme des Prés du Moulin</strong><span>Les Chièzes, 07570 Désaignes · Sam. 8h30–12h</span></div>
+        </div>
+        <div class="pvente-item" data-index="1">
+          <div class="pvente-dot store"></div>
+          <div class="pvente-item-text"><strong>Intermarché Lamastre</strong><span>Route de Désaignes, 07270 Lamastre</span></div>
+        </div>
+        <div class="pvente-item" data-index="2">
+          <div class="pvente-dot store"></div>
+          <div class="pvente-item-text"><strong>Super U Tournon-sur-Rhône</strong><span>Av. du Président Wilson, 07300 Tournon</span></div>
+        </div>
+        <div class="pvente-item" data-index="3">
+          <div class="pvente-dot store"></div>
+          <div class="pvente-item-text"><strong>Intermarché Saint-Agrève</strong><span>Route du Puy, 07320 Saint-Agrève</span></div>
+        </div>
+        <div class="pvente-item" data-index="4">
+          <div class="pvente-dot store"></div>
+          <div class="pvente-item-text"><strong>Carrefour Market Privas</strong><span>Av. de la Résistance, 07000 Privas</span></div>
+        </div>
+        <div class="pvente-item" data-index="5">
+          <div class="pvente-dot store"></div>
+          <div class="pvente-item-text"><strong>Super U Le Cheylard</strong><span>Route de Vernoux, 07160 Le Cheylard</span></div>
+        </div>
+        <div class="pvente-item" data-index="6">
+          <div class="pvente-dot store"></div>
+          <div class="pvente-item-text"><strong>Intermarché Annonay</strong><span>Rue Pierre Brossolette, 07100 Annonay</span></div>
+        </div>
+        <div class="pvente-item" data-index="7">
+          <div class="pvente-dot store"></div>
+          <div class="pvente-item-text"><strong>Bio c' Bon Valence</strong><span>12 Rue Bouffier, 26000 Valence</span></div>
+        </div>
+        <div class="pvente-item" data-index="8">
+          <div class="pvente-dot store"></div>
+          <div class="pvente-item-text"><strong>Épicerie du Terroir — Vernoux</strong><span>Place de la Mairie, 07240 Vernoux-en-Vivarais</span></div>
+        </div>
+        <div class="pvente-item" data-index="9">
+          <div class="pvente-dot store"></div>
+          <div class="pvente-item-text"><strong>Marché de Lamastre</strong><span>Place Rampon, 07270 Lamastre · Mercredi matin</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal-r delay-2">
+      <div id="map-pv" aria-label="Carte des points de vente"></div>
+    </div>
+  </div>
+
+
+  <!-- Infos contact + photo ferme -->
+  <div class="trouver-contact" id="trouver-contact">
+    <div class="trouver-info">
+      <span class="section-label reveal">Nous Trouver</span>
+      <h2 class="section-title reveal delay-1" id="trouver-title">Venez nous rendre<br><em>visite</em></h2>
+      <hr class="section-rule reveal delay-2">
+      <div class="contact-block reveal delay-2">
+        <div class="contact-row">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div class="contact-row-text"><strong>Adresse</strong>Les Chièzes, 07570 Désaignes<br>Ardèche, Auvergne-Rhône-Alpes</div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="contact-row-text"><strong>Horaires de vente</strong>Samedi matin · 8h30 – 12h00<br><span style="font-size:0.82rem;color:var(--accent)">Espèces uniquement</span></div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16.5l.42.42z"/></svg></div>
+          <div class="contact-row-text"><strong>Téléphone</strong>Fabrice : <a href="tel:+33608474525" style="color:var(--accent)">06 08 47 45 25</a><br>Sylvain : <a href="tel:+33769533657" style="color:var(--accent)">07 69 53 36 57</a></div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div class="contact-row-text"><strong>Email</strong><a href="mailto:gaecdespresdumoulin@outlook.fr" style="color:var(--accent)">gaecdespresdumoulin@outlook.fr</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal-r delay-2">
+      <img src="images/ferme-contact.jpg" alt="La ferme des Prés du Moulin à Désaignes" class="trouver-contact-img" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ══════════════════════════════════════════════ -->
+<footer role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="images/logo.png" alt="Logo GAEC des Prés du Moulin" style="height:72px;width:auto;filter:brightness(0) invert(1);opacity:0.9;margin-bottom:1rem">
+      <p>Ferme familiale ardéchoise spécialisée dans la production de yaourts fermiers, faisselles et fruits de saison. Vente directe à la ferme depuis 2001.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#histoire">La Ferme</a></li>
+        <li><a href="#produits">Nos Produits</a></li>
+        <li><a href="#chiffres">En chiffres</a></li>
+        <li><a href="#trouver">Nous Trouver</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>Les Chièzes<br>07570 Désaignes</p>
+      <p style="margin-top:0.8rem">Samedi 8h30 – 12h<br>Espèces uniquement</p>
+      <p style="margin-top:0.8rem"><a href="tel:+33608474525" style="color:var(--ocre)">06 08 47 45 25</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 GAEC des Prés du Moulin · Désaignes, Ardèche</span>
+    <div class="footer-legal">
+      <a href="#">Mentions légales</a>
+      <a href="#">Politique de confidentialité</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ TWEAKS PANEL ════════════════════════════════════════ -->
+<div id="tweaks-panel">
+  <h3>Tweaks</h3>
+  <div class="tweak-row">
+    <label>Couleur d'accent</label>
+    <input type="color" id="tw-accent" value="#C4622D">
+  </div>
+  <div class="tweak-row">
+    <label>Opacité overlay hero (<span id="tw-overlay-val">0.4</span>)</label>
+    <input type="range" id="tw-overlay" min="0.1" max="0.85" step="0.05" value="0.4">
+  </div>
+  <div class="tweak-row">
+    <label>Image hero</label>
+    <select id="tw-hero">
+      <option value="images/ferme.jpg">Vue de la ferme</option>
+      <option value="images/cerises.jpg">Cerisiers</option>
+      <option value="images/ferme-drone.jpg">Vue aérienne</option>
+    </select>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+// ─── TWEAK DEFAULTS ──────────────────────────────────────────
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#C4622D",
+  "overlayOpacity": 0.5,
+  "heroStyle": "image"
+}/*EDITMODE-END*/;
+
+function applyTweaks(t) {
+  document.documentElement.style.setProperty('--tw-accent', t.accentColor || '#C4622D');
+  const overlay = document.getElementById('hero-overlay');
+  if (overlay) {
+    const op = t.overlayOpacity ?? 0.4;
+    overlay.style.background = `linear-gradient(to top, rgba(20,28,14,${Math.min(op+0.4,0.95)}) 0%, rgba(20,28,14,${op}) 55%, transparent 100%)`;
+    document.getElementById('tw-overlay').value = op;
+    document.getElementById('tw-overlay-val').textContent = op;
+  }
+  if (t.accentColor) document.getElementById('tw-accent').value = t.accentColor;
+}
+applyTweaks(TWEAK_DEFAULTS);
+
+// Tweaks listeners
+document.getElementById('tw-accent').addEventListener('input', e => {
+  const v = e.target.value;
+  document.documentElement.style.setProperty('--tw-accent', v);
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{accentColor:v}}, '*');
+});
+document.getElementById('tw-overlay').addEventListener('input', e => {
+  const op = parseFloat(e.target.value);
+  document.getElementById('tw-overlay-val').textContent = op.toFixed(2);
+  document.getElementById('hero-overlay').style.background = `linear-gradient(to top, rgba(20,28,14,${Math.min(op+0.4,0.95)}) 0%, rgba(20,28,14,${op}) 55%, transparent 100%)`;
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{overlayOpacity:op}}, '*');
+});
+document.getElementById('tw-hero').addEventListener('change', e => {
+  document.getElementById('hero-bg').style.backgroundImage = `url('${e.target.value}')`;
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{heroStyle:e.target.value}}, '*');
+});
+
+// Edit mode
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode') document.getElementById('tweaks-panel').style.display = 'block';
+  if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').style.display = 'none';
+});
+window.parent.postMessage({type:'__edit_mode_available'}, '*');
+
+// ─── NAV SCROLL ──────────────────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, {passive:true});
+
+// ─── BURGER MENU ─────────────────────────────────────────────
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobile-menu');
+burger.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('open');
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+document.querySelectorAll('.mobile-link').forEach(l => {
+  l.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', false);
+    document.body.style.overflow = '';
+  });
+});
+
+// ─── PARALLAX HERO ───────────────────────────────────────────
+const heroBg = document.getElementById('hero-bg');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y < window.innerHeight) {
+    heroBg.style.transform = `translateY(${y * 0.28}px) scale(1.1)`;
+  }
+}, {passive:true});
+heroBg.style.transform = 'translateY(0) scale(1.1)';
+
+// ─── REVEAL ON SCROLL ─────────────────────────────────────────
+const revealEls = document.querySelectorAll('.reveal, .reveal-l, .reveal-r');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      revealObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObserver.observe(el));
+
+// ─── COUNT UP ANIMATION ───────────────────────────────────────
+const counters = document.querySelectorAll('[data-target]');
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1800;
+    const step = 16;
+    const steps = duration / step;
+    let current = 0;
+    const increment = target / steps;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        clearInterval(timer);
+        el.textContent = target + suffix;
+      } else {
+        el.textContent = Math.floor(current) + suffix;
+      }
+    }, step);
+    countObserver.unobserve(el);
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => countObserver.observe(c));
+
+// ─── LEAFLET MAP ──────────────────────────────────────────────
+const points = [
+  { nom: "La Ferme des Prés du Moulin", adresse: "Les Chièzes, 07570 Désaignes", note: "Samedi 8h30–12h · Espèces uniquement", lat: 44.9853, lng: 4.5741, type: "ferme" },
+  { nom: "Intermarché Lamastre", adresse: "Route de Désaignes, 07270 Lamastre", lat: 45.0996, lng: 4.5774, type: "store" },
+  { nom: "Super U Tournon-sur-Rhône", adresse: "Av. du Président Wilson, 07300 Tournon", lat: 45.0672, lng: 4.8320, type: "store" },
+  { nom: "Intermarché Saint-Agrève", adresse: "Route du Puy, 07320 Saint-Agrève", lat: 45.0113, lng: 4.3933, type: "store" },
+  { nom: "Carrefour Market Privas", adresse: "Av. de la Résistance, 07000 Privas", lat: 44.7350, lng: 4.5993, type: "store" },
+  { nom: "Super U Le Cheylard", adresse: "Route de Vernoux, 07160 Le Cheylard", lat: 44.9061, lng: 4.4228, type: "store" },
+  { nom: "Intermarché Annonay", adresse: "Rue Pierre Brossolette, 07100 Annonay", lat: 45.2393, lng: 4.6696, type: "store" },
+  { nom: "Bio c' Bon Valence", adresse: "12 Rue Bouffier, 26000 Valence", lat: 44.9334, lng: 4.8924, type: "store" },
+  { nom: "Épicerie du Terroir — Vernoux", adresse: "Place de la Mairie, 07240 Vernoux-en-Vivarais", lat: 44.8964, lng: 4.6522, type: "store" },
+  { nom: "Marché de Lamastre", adresse: "Place Rampon, 07270 Lamastre · Mercredi matin", lat: 45.1010, lng: 4.5800, type: "store" }
+];
+
+const map = L.map('map-pv', { scrollWheelZoom: true, zoomControl: true }).setView([45.03, 4.62], 10);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+const markers = points.map((p, i) => {
+  const color = p.type === 'ferme' ? '#C4622D' : '#7A8C6A';
+  const icon = L.divIcon({
+    className: '',
+    html: `<div style="width:${p.type==='ferme'?18:14}px;height:${p.type==='ferme'?18:14}px;border-radius:50%;background:${color};border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.25)"></div>`,
+    iconSize: [18, 18], iconAnchor: [9, 9], popupAnchor: [0, -14]
+  });
+  const note = p.note ? `<br><em style="color:#888;font-size:12px">${p.note}</em>` : '';
+  const marker = L.marker([p.lat, p.lng], { icon })
+    .addTo(map)
+    .bindPopup(`<strong style="color:#2A3820">${p.nom}</strong><br><span style="font-size:13px;color:#666">${p.adresse}</span>${note}`);
+  return marker;
+});
+
+document.querySelectorAll('.pvente-item').forEach((card, i) => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.pvente-item').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    map.setView([points[i].lat, points[i].lng], 13, { animate: true });
+    markers[i].openPopup();
+  });
+});
+</script>
+</body>
+</html>
