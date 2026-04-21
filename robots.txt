@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /uploads/
+Disallow: /scraps/
+
+Sitemap: https://gaecdespresdumoulin.fr/sitemap.xml
