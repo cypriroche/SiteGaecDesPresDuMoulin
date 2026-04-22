@@ -146,6 +146,7 @@ body::before {
   position: absolute; inset: 0;
   transform-origin: center; will-change: transform;
   transform: translateY(0) scale(1.1);
+  background: url('../images/ferme-drone.jpg') center/cover no-repeat;
 }
 .hero-video {
   position: absolute; inset: 0;
