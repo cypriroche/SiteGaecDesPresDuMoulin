@@ -45,6 +45,57 @@ if (nav) {
 }
 
 
+// ─── HERO VIDEO MUTE TOGGLE ───────────────────────────────────
+const heroVideo   = document.querySelector('.hero-video');
+const heroMuteBtn = document.getElementById('hero-mute-btn');
+let userUnmuted = false;
+let audioFade   = null;
+
+function fadeVolume(video, targetVol, onDone) {
+  clearInterval(audioFade);
+  const step = targetVol > video.volume ? 0.04 : -0.04;
+  audioFade = setInterval(() => {
+    const next = video.volume + step;
+    if ((step > 0 && next >= targetVol) || (step < 0 && next <= targetVol)) {
+      video.volume = targetVol;
+      clearInterval(audioFade);
+      if (onDone) onDone();
+    } else {
+      video.volume = Math.max(0, Math.min(1, next));
+    }
+  }, 40); // ~1 s pour atteindre le volume cible
+}
+
+if (heroVideo && heroMuteBtn) {
+  heroMuteBtn.addEventListener('click', () => {
+    userUnmuted = !userUnmuted;
+    heroMuteBtn.classList.toggle('active', userUnmuted);
+    heroMuteBtn.setAttribute('aria-label', userUnmuted ? 'Couper le son' : 'Activer le son');
+    heroMuteBtn.setAttribute('aria-pressed', String(userUnmuted));
+
+    if (userUnmuted) {
+      heroVideo.muted = false;
+      heroVideo.volume = 0;
+      fadeVolume(heroVideo, 1);
+    } else {
+      fadeVolume(heroVideo, 0, () => { heroVideo.muted = true; });
+    }
+  });
+
+  const heroSection = document.getElementById('hero');
+  if (heroSection) {
+    new IntersectionObserver((entries) => {
+      if (!userUnmuted) return;
+      if (entries[0].isIntersecting) {
+        heroVideo.muted = false;
+        fadeVolume(heroVideo, 1);
+      } else {
+        fadeVolume(heroVideo, 0, () => { heroVideo.muted = true; });
+      }
+    }, { threshold: 0.1 }).observe(heroSection);
+  }
+}
+
 // ─── PARALLAX HERO ───────────────────────────────────────────
 const heroBg = document.getElementById('hero-bg');
 if (heroBg && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
