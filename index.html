@@ -2,11 +2,11 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
   <!-- ─── SEO PRIMAIRE ──────────────────────────────────────── -->
   <title>Ferme des Prés du Moulin – Yaourts Fermiers, Ardèche</title>
-  <meta name="description" content="Yaourts fermiers artisanaux, faisselles & cerises en Ardèche. Vente directe à la ferme, Désaignes (07570) — samedi 8h30–12h. Venez nous voir !">
+  <meta name="description" content="Yaourts fermiers artisanaux, faisselles &amp; cerises en Ardèche. Vente directe à la ferme, Désaignes (07570) — samedi 8h30–12h. Venez nous voir !">
   <meta name="robots" content="index, follow">
   <meta name="author" content="GAEC des Prés du Moulin">
   <link rel="canonical" href="https://gaecdespresdumoulin.fr/">
@@ -17,9 +17,10 @@
   <meta property="og:site_name" content="GAEC des Prés du Moulin">
   <meta property="og:title" content="Ferme des Prés du Moulin – Yaourts Fermiers, Ardèche">
   <meta property="og:description" content="Ferme familiale ardéchoise depuis 2001. Yaourts artisanaux, faisselles et cerises — vente directe le samedi matin à Désaignes (07570).">
-  <meta property="og:image" content="https://gaecdespresdumoulin.fr/images/ferme-drone.jpg">
+  <meta property="og:image" content="https://gaecdespresdumoulin.fr/images/ferme_Drone_comp.webp">
+  <meta property="og:image:type" content="image/webp">
   <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image:height" content="675">
   <meta property="og:image:alt" content="Vue aérienne de la ferme GAEC des Prés du Moulin à Désaignes, Ardèche">
   <meta property="og:url" content="https://gaecdespresdumoulin.fr/">
 
@@ -27,19 +28,47 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ferme des Prés du Moulin – Yaourts Fermiers, Ardèche">
   <meta name="twitter:description" content="Ferme familiale ardéchoise depuis 2001. Yaourts artisanaux, faisselles et cerises — vente directe le samedi matin à Désaignes (07570).">
-  <meta name="twitter:image" content="https://gaecdespresdumoulin.fr/images/ferme-drone.jpg">
+  <meta name="twitter:image" content="https://gaecdespresdumoulin.fr/images/ferme_Drone_comp.webp">
+  <meta name="twitter:image:alt" content="Vue aérienne de la ferme GAEC des Prés du Moulin à Désaignes, Ardèche">
+
+  <!-- ─── COMPATIBILITÉ NAVIGATEURS ──────────────────────── -->
+  <meta name="theme-color" content="#2A3820">
+  <meta name="msapplication-TileColor" content="#2A3820">
+  <meta name="msapplication-config" content="none">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Prés du Moulin">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <!-- ─── GEO ─────────────────────────────────────────────── -->
   <meta name="geo.region" content="FR-07">
   <meta name="geo.placename" content="Désaignes, Ardèche">
+  <meta name="geo.position" content="44.9853;4.5741">
+  <meta name="ICBM" content="44.9853, 4.5741">
 
   <!-- ─── PRELOAD LCP ──────────────────────────────────────── -->
-  <link rel="preload" as="image" href="images/ferme-drone.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="images/ferme-drone_comp.webp" fetchpriority="high">
 
   <!-- ─── ICÔNES & MANIFEST ────────────────────────────────── -->
   <link rel="icon" type="image/png" sizes="32x32" href="images/logo.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/logo.png">
   <link rel="manifest" href="/manifest.json">
+
+  <!-- ─── SCHEMA.ORG — WebSite ────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://gaecdespresdumoulin.fr/#website",
+    "url": "https://gaecdespresdumoulin.fr/",
+    "name": "GAEC des Prés du Moulin",
+    "description": "Ferme familiale ardéchoise — yaourts fermiers artisanaux, faisselles et cerises. Vente directe à Désaignes (Ardèche).",
+    "inLanguage": "fr-FR",
+    "publisher": {
+      "@id": "https://gaecdespresdumoulin.fr/#organization"
+    }
+  }
+  </script>
 
   <!-- ─── SCHEMA.ORG — Organization ───────────────────────── -->
   <script type="application/ld+json">
@@ -84,7 +113,7 @@
     "description": "Ferme familiale ardéchoise spécialisée dans la production artisanale de yaourts fermiers, faisselles, fromage blanc et la culture de cerises. Vente directe à la ferme depuis 2001.",
     "url": "https://gaecdespresdumoulin.fr/",
     "logo": "https://gaecdespresdumoulin.fr/images/logo.png",
-    "image": "https://gaecdespresdumoulin.fr/images/ferme-drone.jpg",
+    "image": "https://gaecdespresdumoulin.fr/images/ferme-drone_comp.webp",
     "telephone": ["+33608474525", "+33769533657"],
     "email": "gaecdespresdumoulin@outlook.fr",
     "address": {
@@ -180,8 +209,8 @@
   <!-- ═══ HERO ══════════════════════════════════════════════════ -->
   <section id="hero" aria-labelledby="hero-title">
     <div class="hero-bg" id="hero-bg" aria-hidden="true">
-      <video class="hero-video" autoplay loop muted playsinline preload="none" poster="images/ferme-drone.jpg">
-        <source src="videos/VideoBackground.mp4" type="video/mp4">
+      <video class="hero-video" autoplay loop muted playsinline preload="none" poster="images/ferme-drone_comp.webp">
+        <source src="video/videoBackgroundv2.mp4" type="video/mp4">
       </video>
     </div>
     <div class="hero-overlay" id="hero-overlay" aria-hidden="true"></div>
@@ -210,7 +239,7 @@
   <!-- ═══ HISTOIRE ══════════════════════════════════════════════ -->
   <section id="histoire" aria-labelledby="histoire-title">
     <div class="histoire-img-wrap reveal-l">
-      <img src="images/histoire.jpg" alt="La ferme GAEC des Prés du Moulin à Désaignes, Ardèche" class="histoire-img" loading="lazy" width="600" height="750">
+      <img src="images/groupe_verticale_comp.webp" alt="La ferme GAEC des Prés du Moulin à Désaignes, Ardèche" class="histoire-img" loading="lazy" width="600" height="750">
       <div class="histoire-badge" aria-hidden="true">
         <strong>2001</strong>
         <span>Fondée à Désaignes</span>
@@ -256,7 +285,7 @@
 
       <article class="card reveal delay-1">
         <div class="card-img">
-          <img src="images/yaourt-3.jpg" alt="Yaourt nature au lait entier de vaches Montbéliardes" loading="lazy" width="400" height="300">
+          <img src="images/yaourt-3_comp.webp" alt="Yaourt nature au lait entier de vaches Montbéliardes" loading="lazy" width="400" height="300">
           <span class="card-badge green">Vente directe</span>
         </div>
         <div class="card-body">
@@ -267,7 +296,7 @@
 
       <article class="card reveal delay-2">
         <div class="card-img">
-          <img src="images/yaourt-1.jpg" alt="Yaourts aromatisés — 10 arômes disponibles" loading="lazy" width="400" height="300">
+          <img src="images/yaourt-aromatisé_comp.webp" alt="Yaourts aromatisés — 10 arômes disponibles" loading="lazy" width="400" height="300">
           <span class="card-badge">10 arômes</span>
           <div class="card-aromes-overlay" role="list" aria-label="Arômes disponibles">
 
@@ -393,13 +422,20 @@
 
             <div class="arome-icon" role="listitem">
               <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M17 6 C15.5 6 14.5 7 14.5 8.5 L13 30 C13 32 14.5 34 17 34.5 C18.5 35 21.5 35 23 34.5 C25.5 34 27 32 27 30 L25.5 8.5 C25.5 7 24.5 6 23 6 Z" fill="#8D6E63"/>
-                <path d="M17 6 C18 5 22 5 23 6" stroke="#6D4C41" stroke-width="1.2" fill="none"/>
-                <line x1="20" y1="7"  x2="20" y2="33.5" stroke="#5D4037" stroke-width="1"   opacity="0.45"/>
-                <line x1="16.5" y1="14" x2="23.5" y2="14" stroke="#5D4037" stroke-width="0.8" opacity="0.35"/>
-                <line x1="16"   y1="20" x2="24"   y2="20" stroke="#5D4037" stroke-width="0.8" opacity="0.35"/>
-                <line x1="16"   y1="26" x2="24"   y2="26" stroke="#5D4037" stroke-width="0.8" opacity="0.35"/>
-                <path d="M15.5 10 C15 18 15 24 15 30" stroke="#D7CCC8" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>
+                <!-- Tige -->
+                <line x1="20" y1="37" x2="20" y2="27" stroke="#558B2F" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Feuille -->
+                <path d="M20 30 C17 27 14.5 25 15 22.5 C17.5 23.5 19.5 27 20 30Z" fill="#66BB6A"/>
+                <!-- 5 pétales tournés de 72° autour du centre (20,20) -->
+                <ellipse cx="20" cy="13" rx="2.5" ry="7" fill="#EDE9B8" transform="rotate(0 20 20)"/>
+                <ellipse cx="20" cy="13" rx="2.5" ry="7" fill="#E8E4AF" transform="rotate(72 20 20)"/>
+                <ellipse cx="20" cy="13" rx="2.5" ry="7" fill="#EDE9B8" transform="rotate(144 20 20)"/>
+                <ellipse cx="20" cy="13" rx="2.5" ry="7" fill="#E8E4AF" transform="rotate(216 20 20)"/>
+                <ellipse cx="20" cy="13" rx="2.5" ry="7" fill="#EDE9B8" transform="rotate(288 20 20)"/>
+                <!-- Cœur de la fleur -->
+                <circle cx="20" cy="20" r="4" fill="#FEFAE0"/>
+                <circle cx="20" cy="20" r="2.5" fill="#F5D800"/>
+                <circle cx="20" cy="20" r="1.2" fill="#C8A000"/>
               </svg>
               <span>Vanille</span>
             </div>
@@ -414,7 +450,7 @@
 
       <article class="card reveal delay-3">
         <div class="card-img">
-          <img src="images/yaourt-4.jpg" alt="Faisselle et fromage blanc battu de la ferme" loading="lazy" width="400" height="300">
+          <img src="images/faisselle_B_comp.webp" alt="Faisselle et fromage blanc battu de la ferme" loading="lazy" width="400" height="300">
           <span class="card-badge green">Circuit court</span>
         </div>
         <div class="card-body">
@@ -425,7 +461,7 @@
 
       <article class="card reveal delay-1">
         <div class="card-img">
-          <img src="images/yaourt-2.jpg" alt="Bicouche châtaigne — spécialité ardéchoise" loading="lazy" width="400" height="300">
+          <img src="images/yaourt-2_comp.webp" alt="Bicouche châtaigne — spécialité ardéchoise" loading="lazy" width="400" height="300">
           <span class="card-badge">Spécialité</span>
         </div>
         <div class="card-body">
@@ -451,29 +487,68 @@
       <h2 class="section-title" id="galerie-title">Nos cerisiers<br><em>en images</em></h2>
       <hr class="section-rule">
     </div>
-    <div class="galerie-grid" role="list" aria-label="Galerie photos des cerisiers">
+    <div class="galerie-grid galerie-grid--cerises" role="list" aria-label="Galerie photos des cerisiers">
       <div class="galerie-item reveal delay-1" role="listitem">
-        <img src="images/cerises.jpg" alt="Cerises ardéchoises en gros plan" loading="lazy" width="300" height="280">
+        <img src="images/cerises_comp.webp" alt="Cerises ardéchoises en gros plan" loading="lazy" width="300" height="280">
       </div>
       <div class="galerie-item galerie-item--tall reveal delay-2" role="listitem">
-        <img src="images/cerises4.jpg" alt="Cerises mûres sur l'arbre" loading="lazy" width="300" height="560">
+        <img src="images/cerises4_comp.webp" alt="Cerises mûres sur l'arbre" loading="lazy" width="300" height="560">
       </div>
       <div class="galerie-item reveal delay-3" role="listitem">
-        <img src="images/transport-cerises.jpg" alt="Transport des cerises" loading="lazy" width="300" height="280">
+        <img src="images/transport-cerises_comp.webp" alt="Transport des cerises" loading="lazy" width="300" height="280">
       </div>
       <div class="galerie-item reveal delay-1" role="listitem">
-        <img src="images/cerises3.jpg" alt="Récolte des cerises ardéchoises" loading="lazy" width="300" height="280">
+        <img src="images/cerises3_comp.webp" alt="Récolte des cerises ardéchoises" loading="lazy" width="300" height="280">
       </div>
       <div class="galerie-item galerie-item--tall reveal delay-2" role="listitem">
-        <img src="images/tri-cerises.jpg" alt="Tri des cerises à la ferme" loading="lazy" width="300" height="560">
+        <img src="images/tri-cerises_comp.webp" alt="Tri des cerises à la ferme" loading="lazy" width="300" height="560">
       </div>
       <div class="galerie-item reveal delay-3" role="listitem">
-        <img src="images/cerises-drone.jpg" alt="Vue aérienne des cerisiers" loading="lazy" width="300" height="280">
+        <img src="images/cerises-drone_comp.webp" alt="Vue aérienne des cerisiers" loading="lazy" width="300" height="280">
       </div>
       <div class="galerie-item reveal delay-1" role="listitem">
-        <img src="images/cerises2.jpg" alt="Cerisiers à Désaignes" loading="lazy" width="300" height="280">
+        <img src="images/cerises2_comp.webp" alt="Cerisiers à Désaignes" loading="lazy" width="300" height="280">
       </div>
     </div>
+
+    <!-- Bouton Voir la fabrication -->
+    <div class="galerie-fab-cta reveal">
+      <button class="btn-fab-toggle" id="btn-fab-toggle" aria-expanded="false" aria-controls="galerie-fabrication">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Voir la fabrication
+        <svg class="icon-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+
+    <!-- Galerie fabrication (cachée par défaut) -->
+    <div class="galerie-fabrication" id="galerie-fabrication" aria-hidden="true">
+      <div class="galerie-fab-header">
+        <span class="section-label" style="color:var(--forest)">Notre atelier</span>
+        <h3 class="section-title" style="color:var(--forest)">La fabrication<br><em>artisanale</em></h3>
+        <hr class="section-rule" style="background:var(--ocre);margin:1.4rem 0 0">
+      </div>
+      <div class="galerie-grid" role="list" aria-label="Photos de la fabrication artisanale des yaourts">
+        <div class="galerie-item galerie-item--tall" role="listitem">
+          <img src="images/fabrication-3_comp.webp" alt="Mise en pot des yaourts artisanaux" loading="lazy" width="800" height="1120">
+        </div>
+        <div class="galerie-item" role="listitem">
+          <img src="images/fabrication-1_comp.webp" alt="Fabrication artisanale des yaourts fermiers" loading="lazy" width="800" height="450">
+        </div>
+        <div class="galerie-item" role="listitem">
+          <img src="images/fabrication-2_comp.webp" alt="Préparation du lait pour les yaourts" loading="lazy" width="800" height="450">
+        </div>
+        <div class="galerie-item" role="listitem">
+          <img src="images/fabrication-4_comp.webp" alt="Contrôle qualité à l'atelier" loading="lazy" width="800" height="450">
+        </div>
+        <div class="galerie-item galerie-item--tall" role="listitem">
+          <img src="images/fabrication-5_comp.webp" alt="L'atelier de fabrication de la ferme" loading="lazy" width="800" height="1120">
+        </div>
+        <div class="galerie-item galerie-item--wide" role="listitem">
+          <img src="images/fabrication-6_comp.webp" alt="Le laboratoire artisanal des Prés du Moulin" loading="lazy" width="1600" height="560">
+        </div>
+      </div>
+    </div>
+
   </section>
 
   <!-- ═══ NOUS TROUVER ══════════════════════════════════════════ -->
@@ -511,64 +586,211 @@
           <div class="pvente-item" data-index="1" role="listitem">
             <div class="pvente-dot store" aria-hidden="true"></div>
             <div class="pvente-item-text">
-              <strong>Intermarché Lamastre</strong>
-              <span>Route de Désaignes, 07270 Lamastre</span>
+              <strong>Intermarché</strong>
+              <span>6 Chem. de la Gare, 07300 Saint-Jean-de-Muzols</span>
             </div>
           </div>
           <div class="pvente-item" data-index="2" role="listitem">
             <div class="pvente-dot store" aria-hidden="true"></div>
             <div class="pvente-item-text">
-              <strong>Super U Tournon-sur-Rhône</strong>
-              <span>Av. du Président Wilson, 07300 Tournon</span>
+              <strong>Intermarché</strong>
+              <span>Pl. de l'Allet, 26500 Bourg-lès-Valence</span>
             </div>
           </div>
           <div class="pvente-item" data-index="3" role="listitem">
             <div class="pvente-dot store" aria-hidden="true"></div>
             <div class="pvente-item-text">
-              <strong>Intermarché Saint-Agrève</strong>
-              <span>Route du Puy, 07320 Saint-Agrève</span>
+              <strong>Intermarché</strong>
+              <span>1 Chem. de la Brassière, 26240 Saint-Vallier</span>
             </div>
           </div>
           <div class="pvente-item" data-index="4" role="listitem">
             <div class="pvente-dot store" aria-hidden="true"></div>
             <div class="pvente-item-text">
-              <strong>Carrefour Market Privas</strong>
-              <span>Av. de la Résistance, 07000 Privas</span>
+              <strong>Intermarché</strong>
+              <span>450 Av. des Lots, 26600 Tain-l'Hermitage</span>
             </div>
           </div>
           <div class="pvente-item" data-index="5" role="listitem">
             <div class="pvente-dot store" aria-hidden="true"></div>
             <div class="pvente-item-text">
-              <strong>Super U Le Cheylard</strong>
-              <span>Route de Vernoux, 07160 Le Cheylard</span>
+              <strong>Intermarché</strong>
+              <span>Rue Ferdinand Hérold, 07270 Lamastre</span>
             </div>
           </div>
           <div class="pvente-item" data-index="6" role="listitem">
             <div class="pvente-dot store" aria-hidden="true"></div>
             <div class="pvente-item-text">
-              <strong>Intermarché Annonay</strong>
-              <span>Rue Pierre Brossolette, 07100 Annonay</span>
+              <strong>Intermarché</strong>
+              <span>Pont des Lônes, Rue des Sabotiers, 07130 Soyons</span>
             </div>
           </div>
           <div class="pvente-item" data-index="7" role="listitem">
             <div class="pvente-dot store" aria-hidden="true"></div>
             <div class="pvente-item-text">
-              <strong>Bio c' Bon Valence</strong>
-              <span>12 Rue Bouffier, 26000 Valence</span>
+              <strong>Proxi</strong>
+              <span>20 Pl. des Frères Montgolfier, 07270 Lamastre</span>
             </div>
           </div>
           <div class="pvente-item" data-index="8" role="listitem">
             <div class="pvente-dot store" aria-hidden="true"></div>
             <div class="pvente-item-text">
-              <strong>Épicerie du Terroir — Vernoux</strong>
-              <span>Place de la Mairie, 07240 Vernoux-en-Vivarais</span>
+              <strong>Proxi</strong>
+              <span>1 Rue de la Poste, 07410 Saint-Félicien</span>
             </div>
           </div>
           <div class="pvente-item" data-index="9" role="listitem">
             <div class="pvente-dot store" aria-hidden="true"></div>
             <div class="pvente-item-text">
-              <strong>Marché de Lamastre</strong>
-              <span>Place Rampon, 07270 Lamastre · Mercredi matin</span>
+              <strong>Proxi</strong>
+              <span>11 Av. de la Gare, 07160 Le Cheylard</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="10" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Super U</strong>
+              <span>680 Plaine de Sumène, 07270 Lamastre</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="11" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Super U</strong>
+              <span>110 La Palisse Ouest, 07160 Le Cheylard</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="12" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Super U</strong>
+              <span>50 Av. de l'Europe, 07100 Annonay</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="13" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Le Cabas de Steph</strong>
+              <span>12 Pl. Charles Seignobos, 07270 Lamastre</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="14" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Netto</strong>
+              <span>Rue Henri Chalamet, 07300 Tournon-sur-Rhône</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="15" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Netto</strong>
+              <span>51 Av. du Président Roosevelt, 26600 Tain-l'Hermitage</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="16" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Primeur du Chantre</strong>
+              <span>1750 Av. de Provence, 26320 Saint-Marcel-lès-Valence</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="17" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Les Halles de Taga</strong>
+              <span>122 Allée des Artisans, 07210 Baix</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="18" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Vival</strong>
+              <span>24 Rue des Cévennes, 07520 Lalouvesc</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="19" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Vival / Coccimarket</strong>
+              <span>16 Le Grand Chemin, 07100 Roiffieux</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="20" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>La Tradition Préauxoise</strong>
+              <span>185 Grande Rue, 07290 Préaux</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="21" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Distri'Ferm</strong>
+              <span>Chem. l'Oiseau Bleu, 07300 Tournon-sur-Rhône</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="22" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Épicerie de Cécile</strong>
+              <span>26 Imp. du Belvédère, 07300 Saint-Barthélemy-le-Plain</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="23" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Le Relais des Mousquetaires</strong>
+              <span>Le Village, 07270 Colombier-le-Jeune</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="24" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Épicerie de Larnage</strong>
+              <span>30 Rue des Baumes, 26600 Larnage</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="25" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Boucherie Comte</strong>
+              <span>Place des Galets du Rhône, 07300 Mauves</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="26" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Épicerie Montaland</strong>
+              <span>Le Village, 07270 Nozières</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="27" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Leclerc</strong>
+              <span>Rue des Chabanneries, 26500 Bourg-lès-Valence</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="28" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Leclerc</strong>
+              <span>404 Av. Victor Hugo, 26000 Valence</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="29" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Les Fruits de la Source</strong>
+              <span>240 Rue de la Belle Meunière, 26500 Bourg-lès-Valence</span>
+            </div>
+          </div>
+          <div class="pvente-item" data-index="30" role="listitem">
+            <div class="pvente-dot store" aria-hidden="true"></div>
+            <div class="pvente-item-text">
+              <strong>Service des Gourmands</strong>
+              <span>46 Av. du 8 Mai 1945, 07300 Tournon-sur-Rhône</span>
             </div>
           </div>
         </div>
@@ -626,7 +848,7 @@
         </address>
       </div>
       <div class="reveal-r delay-2">
-        <img src="images/ferme-contact.jpg" alt="La ferme des Prés du Moulin à Désaignes — vue de la cour" class="trouver-contact-img" loading="lazy" width="600" height="450">
+        <img src="images/ferme_Drone_comp.webp" alt="La ferme des Prés du Moulin à Désaignes — vue de la cour" class="trouver-contact-img" loading="lazy" width="1200" height="675">
       </div>
     </div>
 

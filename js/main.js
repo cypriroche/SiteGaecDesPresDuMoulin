@@ -122,20 +122,41 @@ revealEls.forEach(el => revealObserver.observe(el));
 // ─── LEAFLET MAP ──────────────────────────────────────────────
 if (typeof L !== 'undefined' && document.getElementById('map-pv')) {
 const POINTS = [
-  { nom: "La Ferme des Prés du Moulin", adresse: "Les Chièzes, 07570 Désaignes", note: "Samedi 8h30–12h · Espèces uniquement", lat: 44.9853, lng: 4.5741, type: "ferme" },
-  { nom: "Intermarché Lamastre", adresse: "Route de Désaignes, 07270 Lamastre", lat: 45.0996, lng: 4.5774, type: "store" },
-  { nom: "Super U Tournon-sur-Rhône", adresse: "Av. du Président Wilson, 07300 Tournon", lat: 45.0672, lng: 4.8320, type: "store" },
-  { nom: "Intermarché Saint-Agrève", adresse: "Route du Puy, 07320 Saint-Agrève", lat: 45.0113, lng: 4.3933, type: "store" },
-  { nom: "Carrefour Market Privas", adresse: "Av. de la Résistance, 07000 Privas", lat: 44.7350, lng: 4.5993, type: "store" },
-  { nom: "Super U Le Cheylard", adresse: "Route de Vernoux, 07160 Le Cheylard", lat: 44.9061, lng: 4.4228, type: "store" },
-  { nom: "Intermarché Annonay", adresse: "Rue Pierre Brossolette, 07100 Annonay", lat: 45.2393, lng: 4.6696, type: "store" },
-  { nom: "Bio c' Bon Valence", adresse: "12 Rue Bouffier, 26000 Valence", lat: 44.9334, lng: 4.8924, type: "store" },
-  { nom: "Épicerie du Terroir — Vernoux", adresse: "Place de la Mairie, 07240 Vernoux-en-Vivarais", lat: 44.8964, lng: 4.6522, type: "store" },
-  { nom: "Marché de Lamastre", adresse: "Place Rampon, 07270 Lamastre · Mercredi matin", lat: 45.1010, lng: 4.5800, type: "store" }
+  { nom: "La Ferme des Prés du Moulin", adresse: "Les Chièzes, 07570 Désaignes", note: "Samedi 8h30–12h · Espèces uniquement", lat: 45.01581, lng: 4.49103, type: "ferme" },
+  { nom: "Intermarché", adresse: "6 Chem. de la Gare, 07300 Saint-Jean-de-Muzols", lat: 45.076144, lng: 4.814582, type: "store" },
+  { nom: "Intermarché", adresse: "Pl. de l'Allet, 26500 Bourg-lès-Valence", lat: 44.959082, lng: 4.907268, type: "store" },
+  { nom: "Intermarché", adresse: "1 Chem. de la Brassière, 26240 Saint-Vallier", lat: 45.171115, lng: 4.813512, type: "store" },
+  { nom: "Intermarché", adresse: "450 Av. des Lots, 26600 Tain-l'Hermitage", lat: 45.068112, lng: 4.866502, type: "store" },
+  { nom: "Intermarché", adresse: "Rue Ferdinand Hérold, 07270 Lamastre", lat: 44.984494, lng: 4.576582, type: "store" },
+  { nom: "Intermarché", adresse: "Pont des Lônes, Rue des Sabotiers, 07130 Soyons", lat: 44.917645, lng: 4.862062, type: "store" },
+  { nom: "Proxi", adresse: "20 Pl. des Frères Montgolfier, 07270 Lamastre", lat: 44.985881, lng: 4.579288, type: "store" },
+  { nom: "Proxi", adresse: "1 Rue de la Poste, 07410 Saint-Félicien", lat: 45.087263, lng: 4.626953, type: "store" },
+  { nom: "Proxi", adresse: "11 Av. de la Gare, 07160 Le Cheylard", lat: 44.913376, lng: 4.427756, type: "store" },
+  { nom: "Super U", adresse: "680 Plaine de Sumène, 07270 Lamastre", lat: 44.975247, lng: 4.558907, type: "store" },
+  { nom: "Super U", adresse: "110 La Palisse Ouest, 07160 Le Cheylard", lat: 44.91174, lng: 4.44038, type: "store" },
+  { nom: "Super U", adresse: "50 Av. de l'Europe, 07100 Annonay", lat: 45.2434, lng: 4.66931, type: "store" },
+  { nom: "Le Cabas de Steph", adresse: "12 Pl. Charles Seignobos, 07270 Lamastre", lat: 44.98547, lng: 4.580468, type: "store" },
+  { nom: "Netto", adresse: "Rue Henri Chalamet, 07300 Tournon-sur-Rhône", lat: 45.05087, lng: 4.833584, type: "store" },
+  { nom: "Netto", adresse: "51 Av. du Président Roosevelt, 26600 Tain-l'Hermitage", lat: 45.067635, lng: 4.848441, type: "store" },
+  { nom: "Primeur du Chantre", adresse: "1750 Av. de Provence, 26320 Saint-Marcel-lès-Valence", lat: 44.956359, lng: 4.933829, type: "store" },
+  { nom: "Les Halles de Taga", adresse: "122 Allée des Artisans, 07210 Baix", lat: 44.725846, lng: 4.740827, type: "store" },
+  { nom: "Vival", adresse: "24 Rue des Cévennes, 07520 Lalouvesc", lat: 45.1201, lng: 4.534911, type: "store" },
+  { nom: "Vival / Coccimarket", adresse: "16 Le Grand Chemin, 07100 Roiffieux", lat: 45.227699, lng: 4.659924, type: "store" },
+  { nom: "La Tradition Préauxoise", adresse: "185 Grande Rue, 07290 Préaux", lat: 45.143018, lng: 4.664419, type: "store" },
+  { nom: "Distri'Ferm", adresse: "Chem. l'Oiseau Bleu, 07300 Tournon-sur-Rhône", lat: 45.057177, lng: 4.855919, type: "store" },
+  { nom: "Épicerie de Cécile", adresse: "26 Imp. du Belvédère, 07300 Saint-Barthélemy-le-Plain", lat: 45.053715, lng: 4.744275, type: "store" },
+  { nom: "Le Relais des Mousquetaires", adresse: "Le Village, 07270 Colombier-le-Jeune", lat: 45.010676, lng: 4.70239, type: "store" },
+  { nom: "Épicerie de Larnage", adresse: "30 Rue des Baumes, 26600 Larnage", lat: 45.097326, lng: 4.863594, type: "store" },
+  { nom: "Boucherie Comte", adresse: "Place des Galets du Rhône, 07300 Mauves", lat: 45.038653, lng: 4.831143, type: "store" },
+  { nom: "Épicerie Montaland", adresse: "Le Village, 07270 Nozières", lat: 45.028573, lng: 4.542877, type: "store" },
+  { nom: "Leclerc", adresse: "Rue des Chabanneries, 26500 Bourg-lès-Valence", lat: 44.95893, lng: 4.881535, type: "store" },
+  { nom: "Leclerc", adresse: "404 Av. Victor Hugo, 26000 Valence", lat: 44.909683, lng: 4.882433, type: "store" },
+  { nom: "Les Fruits de la Source", adresse: "240 Rue de la Belle Meunière, 26500 Bourg-lès-Valence", lat: 44.949121, lng: 4.921384, type: "store" },
+  { nom: "Service des Gourmands", adresse: "46 Av. du 8 Mai 1945, 07300 Tournon-sur-Rhône", lat: 45.060415, lng: 4.836952, type: "store" },
 ];
 
 const map = L.map('map-pv', { scrollWheelZoom: true, zoomControl: true })
-  .setView([45.03, 4.62], 10);
+  .setView([45.05, 4.72], 9);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
   attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
@@ -348,3 +369,21 @@ document.addEventListener('click', e => {
 });
 
 } // end Leaflet guard
+
+// ─── GALERIE FABRICATION TOGGLE ───────────────────────────────
+const btnFab    = document.getElementById('btn-fab-toggle');
+const fabGallery = document.getElementById('galerie-fabrication');
+
+if (btnFab && fabGallery) {
+  btnFab.addEventListener('click', () => {
+    const isOpen = fabGallery.classList.toggle('open');
+    btnFab.setAttribute('aria-expanded', String(isOpen));
+    fabGallery.setAttribute('aria-hidden', String(!isOpen));
+
+    if (isOpen) {
+      setTimeout(() => {
+        fabGallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    }
+  });
+}
