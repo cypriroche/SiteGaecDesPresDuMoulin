@@ -48,6 +48,10 @@ if (nav) {
 // ─── HERO VIDEO MUTE TOGGLE ───────────────────────────────────
 const heroVideo   = document.querySelector('.hero-video');
 const heroMuteBtn = document.getElementById('hero-mute-btn');
+
+if (heroVideo) {
+  heroVideo.play().catch(() => {});
+}
 let userUnmuted = false;
 let audioFade   = null;
 

@@ -731,10 +731,16 @@ footer {
   .galerie-item--tall { grid-row: span 2; }
 }
 
+/* ─── VIDÉO MOBILE ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero-video { display: none; }
+}
+
 /* ─── ACCESSIBILITÉ ───────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .reveal, .reveal-l, .reveal-r { transition: none !important; opacity: 1; transform: none; }
   .hero-bg { transform: none !important; }
+  .hero-video { display: none; }
   .scroll-line::after { animation: none; }
 }
 
